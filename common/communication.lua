@@ -1,3 +1,5 @@
+local json = require "json"
+
 Websocket = assert(http.websocket("wss://yurtle.net/cc/" .. settings.get("wsid")))
 
 local function websocketHandler()

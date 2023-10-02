@@ -17,7 +17,7 @@ settings.define("wsid", {
 })
 
 shell.run("delete json")
-shell.run("wget https://pastebin.com/raw/4nRg9CHU json")
+shell.run("wget https://pastebin.com/raw/4nRg9CHU json.lua")
 
 shell.run("delete startup.lua")
 shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/common/startup.lua?t=" .. os.time())
