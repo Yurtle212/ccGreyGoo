@@ -30,7 +30,7 @@ local function main()
     })
 
     local subdivisions = subdivideChunk()
-    print()
+    print(textutils.serialise(subdivisions))
     while true do
         os.startTimer(1)
         os.pullEvent("timer")
