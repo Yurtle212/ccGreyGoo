@@ -29,7 +29,7 @@ local function main()
         message = "manager initialized"
     })
 
-    local subdivisions = subdivideChunk()
+    local subdivisions = subdivideChunk(4)
     print(textutils.serialise(subdivisions))
     while true do
         os.startTimer(1)
