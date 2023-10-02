@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <title>YurtleCC</title>
+    <script src="js/websocketHelper.js"></script>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+
+<body>
+    <div id="wsEventLog" class="widget">
+        <template id="wsEventTemplate">
+            <div class="wsEvent">
+                <h2 class="eventType"></h2>
+                <h3 class="eventTimestamp"></h3>
+                <pre class="eventData"></pre>
+            </div>
+        </template>
+    </div>
+    <div id="wsSignaler" class="widget">
+        <input id="signalText" type="text" placeholder="signal" value="test" />
+        <button onclick="sendSignal()">Send Signal</button>
+    </div>
+    <script>
+        var UUID;
+        var ccSocket;
+
+        function initWebsocket() {
+            ccSocket = new WebSocket(
+                wsurl(""),
+                "websiteClient",
+            );
+
+            ccSocket.onopen = (event) => {
+                console.log("Websocket opened");
+            };
+
+            ccSocket.onclose = (event) => {
+                setTimeout(initWebsocket, 500);
+            }
+
+            ccSocket.onerror = (event) => {
+                console.log(event);
+            }
+
+            ccSocket.onmessage = (event) => {
+                let message = JSON.parse(event.data);
+                if (messageTypes[message.type] != null) {
+                    messageTypes[message.type](message);
+                } else {
+                    wsLog(message);
+                }
+            }
+        }
+
+        const messageTypes = {
+            init: wsInit,
+        }
+
+        function wsInit(message) {
+            UUID = message.data.UUID;
+            wsLog(message, "Websocket Initialized");
+        }
+
+        function wsLog(message, type) {
+            let node = getWsEventNode();
+            node.querySelector(".eventType").textContent = type ?? message.type;
+            node.querySelector(".eventTimestamp").textContent = new Date(message.timestamp).toLocaleString();
+            node.querySelector(".eventData").textContent = JSON.stringify(message.data, null, "\t");
+            appendEventNode(node);
+        }
+
+        function getWsEventNode() {
+            return document.querySelector("#wsEventTemplate").content.cloneNode(true);
+        }
+
+        function appendEventNode(node) {
+            document.querySelector("#wsEventLog").prepend(node);
+        }
+
+        function pingWS() {
+            ccSocket.send(JSON.stringify({
+                "type": "ping",
+                "data": {},
+                "timestamp": Date.now()
+            }))
+        }
+
+        function sendSignal() {
+            console.log("signal")
+            ccSocket.send(JSON.stringify({
+                "type": "signal",
+                "data": {
+                    sender: UUID,
+                    signal: [[document.querySelector("#signalText").value]],
+                },
+                "timestamp": Date.now()
+            }))
+        }
+
+        function sendHivemine() {
+            console.log("hivemine signal")
+            ccSocket.send(JSON.stringify({
+                "type": "hiveminer",
+                "data": {
+                    sender: UUID,
+                    pos1: {
+                        x: Number(document.querySelector("#hmInputx1").value),
+                        y: Number(document.querySelector("#hmInputy1").value),
+                        z: Number(document.querySelector("#hmInputz1").value),
+                    },
+                    pos2: {
+                        x: Number(document.querySelector("#hmInputx2").value),
+                        y: Number(document.querySelector("#hmInputy2").value),
+                        z: Number(document.querySelector("#hmInputz2").value),
+                    }, 
+                    subdivisions: {
+                        x: Number(document.querySelector("#hmsInputx").value),
+                        z: Number(document.querySelector("#hmsInputz").value),
+                    }
+                },
+                "timestamp": Date.now()
+            }))
+        }
+
+        initWebsocket();
+    </script>
+</body>
+
+</html>

@@ -29,7 +29,7 @@ local function move(direction, blocks)
                     turtle.digUp()
                 end
                 turtle.up()
-            elseif (direction == "up") then
+            elseif (direction == "down") then
                 if turtle.detectDown() then
                     turtle.digDown()
                 end

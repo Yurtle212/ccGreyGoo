@@ -52,4 +52,11 @@ local function refuel(amount)
     end
 end
 
-return { refuel = refuel, findItemInInventory = findItemInInventory, fuelItems = fuelItems, NUM_SLOTS = 16 }
+local function getChunk(x, z)
+    return {
+        x = x // 16,
+        z = z // 16
+    }    
+end
+
+return { refuel = refuel, findItemInInventory = findItemInInventory, fuelItems = fuelItems, getChunk = getChunk, NUM_SLOTS = NUM_SLOTS }
