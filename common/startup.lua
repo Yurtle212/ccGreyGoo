@@ -14,7 +14,6 @@ settings.define("heading", {
 settings.define("wsid", {
     description = "Websocket channel",
     default = "0",
-    type = string,
 })
 
 shell.run("delete json")

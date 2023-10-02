@@ -97,7 +97,7 @@
             // }))
             let signal = JSON.parse(document.querySelector("#signalText").value)
             signal.timestamp = Date.now()
-            ccSocket.send(signal)
+            ccSocket.send(JSON.stringify(signal))
         }
 
         function sendHivemine() {
