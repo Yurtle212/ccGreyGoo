@@ -1,4 +1,4 @@
-local json = require "json"
+os.loadAPI("json")
 
 Websocket = assert(http.websocket("wss://yurtle.net/cc/" .. settings.get("wsid")))
 
