@@ -24,11 +24,10 @@ end
 
 local function sendSignal(signalType, data)
     Websocket.send(json.encode({
-        type = "signal",
-        data = {
-
-        }
+        type = signalType,
+        data = data,
+        timestamp = os.time()
     }))
 end
 
-return { websocketHandler = websocketHandler }
+return { websocketHandler = websocketHandler, sendSignal = sendSignal }
