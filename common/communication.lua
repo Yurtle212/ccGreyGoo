@@ -9,18 +9,16 @@ local function websocketHandler()
             os.pullEvent("timer")
 
             Websocket = assert(http.websocket("wss://yurtle.net/cc/" .. settings.get("wsid")))
-            goto continue
+        elseif raw ~= nil then
+            local signal = json.decode(raw)
+            if signal.type == "reboot" then
+                shell.run("delete startup.lua")
+                shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/common/startup.lua?t=" ..
+                os.time())
+
+                shell.run("reboot")
+            end
         end
-
-        local signal = json.decode(raw)
-        if signal.type == "reboot" then
-            shell.run("delete startup.lua")
-            shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/common/startup.lua?t=" .. os.time())
-
-            shell.run("reboot")
-        end
-
-        ::continue::
     end
 end
 
