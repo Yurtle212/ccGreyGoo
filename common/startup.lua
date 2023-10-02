@@ -16,3 +16,10 @@ shell.run("wget https://pastebin.com/raw/4nRg9CHU json")
 
 shell.run("delete startup.lua")
 shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/common/startup.lua?t=" .. os.time())
+
+if (settings.get("goo.type") == "manager") then
+    shell.run("delete manager.lua")
+    shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/ManagerTurtle/manager.lua?t=" .. os.time())
+
+    shell.run("manager")
+end
