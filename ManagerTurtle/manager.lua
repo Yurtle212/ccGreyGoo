@@ -1,5 +1,6 @@
 local movement = require "movement"
 local ws = require "communication"
+local util = require "util"
 
 local function subdivideChunk(numBots)
     local subdivisions = {}
@@ -21,15 +22,47 @@ local function subdivideChunk(numBots)
     return subdivisions
 end
 
+local function transformedSubdivisions(subdivisions)
+    local x, y, z = gps.locate()
+    local chunk = util.getChunk(x, z)
+    local chunkCoords = {
+        x = chunk.x * 16,
+        z = chunk.z * 16
+    }
+
+    for index, value in ipairs(subdivisions) do
+        subdivisions[index] = {
+            value.x1 + chunkCoords.x,
+            value.x2 + chunkCoords.x,
+            value.z1 + chunkCoords.z,
+            value.x2 + chunkCoords.z,
+        }
+    end
+
+    return subdivisions
+end
+
 local function main()
     movement.moveUp(2)
     movement.moveDown(2)
 
-    ws.sendSignal("ack", {
-        message = "manager initialized"
+    local x,y,z = gps.locate()
+    local position = {
+        x = x,
+        y = y,
+        z = z
+    }
+
+    ws.sendSignal("Grey Goo Manager Initialized", {
+        message = "manager initialized",
+        position = position
     })
 
     local subdivisions = subdivideChunk(4)
+    subdivisions = transformedSubdivisions(subdivisions)
+
+    ws.sendSignal("subdivisions", subdivisions)
+
     print(textutils.serialise(subdivisions))
     while true do
         os.startTimer(1)
