@@ -32,10 +32,10 @@ local function transformedSubdivisions(subdivisions)
 
     for index, value in ipairs(subdivisions) do
         subdivisions[index] = {
-            value.x1 + chunkCoords.x,
-            value.x2 + chunkCoords.x,
-            value.z1 + chunkCoords.z,
-            value.x2 + chunkCoords.z,
+            x1 = value.x1 + chunkCoords.x,
+            x2 = value.x2 + chunkCoords.x,
+            z1 = value.z1 + chunkCoords.z,
+            z2 = value.z2 + chunkCoords.z,
         }
     end
 
@@ -59,11 +59,11 @@ local function main()
     })
 
     local subdivisions = subdivideChunk(4)
-    subdivisions = transformedSubdivisions(subdivisions)
-
     ws.sendSignal("subdivisions", subdivisions)
 
-    print(textutils.serialise(subdivisions))
+    subdivisions = transformedSubdivisions(subdivisions)
+    ws.sendSignal("subdivisions", subdivisions)
+
     while true do
         os.startTimer(1)
         os.pullEvent("timer")
