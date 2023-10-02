@@ -54,8 +54,8 @@ end
 
 local function getChunk(x, z)
     return {
-        x = x // 16,
-        z = z // 16
+        x = math.floor(x / 16),
+        z = math.floor(z / 16)
     }    
 end
 
