@@ -3,7 +3,10 @@ local ws = require "communication"
 
 local function main()
     while true do
-        sleep(1)
+        os.startTimer(1)
+        os.pullEvent("timer")
+
+        
     end
 end
 
