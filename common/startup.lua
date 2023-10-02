@@ -11,6 +11,12 @@ settings.define("heading", {
     type = number,
 })
 
+settings.define("wsid", {
+    description = "Websocket channel",
+    default = "0",
+    type = string,
+})
+
 shell.run("delete json")
 shell.run("wget https://pastebin.com/raw/4nRg9CHU json")
 
@@ -31,4 +37,15 @@ if (settings.get("goo.type") == "manager") then
     shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/ManagerTurtle/manager.lua?t=" .. os.time())
 
     shell.run("manager")
+elseif settings.get("goo.type" == "miner") then
+    settings.define("minerID", {
+        description = "Websocket channel",
+        default = "0",
+        type = string,
+    })
+
+    shell.run("delete manager.lua")
+    shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/MinerTurtle/miner.lua?t=" .. os.time())
+
+    shell.run("miner")
 end

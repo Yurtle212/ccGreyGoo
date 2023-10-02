@@ -1,5 +1,8 @@
 local movement = require "movement"
+local ws = require "communication"
 
-movement.moveUp(3)
-movement.moveForward()
-movement.moveDown(2)
+local function main()
+    
+end
+
+parallel.waitForAny(main, ws.websocketHandler)
