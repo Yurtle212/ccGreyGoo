@@ -56,7 +56,16 @@ local function getChunk(x, z)
     return {
         x = math.floor(x / 16),
         z = math.floor(z / 16)
-    }    
+    }
 end
 
-return { refuel = refuel, findItemInInventory = findItemInInventory, fuelItems = fuelItems, getChunk = getChunk, NUM_SLOTS = NUM_SLOTS }
+local function get_keys(t)
+    local keys = {}
+    for key, _ in pairs(t) do
+        table.insert(keys, key)
+    end
+    return keys
+end
+
+return { refuel = refuel, findItemInInventory = findItemInInventory, fuelItems = fuelItems, getChunk = getChunk,
+    NUM_SLOTS = NUM_SLOTS, get_keys = get_keys }

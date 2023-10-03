@@ -43,9 +43,22 @@ local function transformedSubdivisions(subdivisions)
 end
 
 local function craft(recipe)
+    recipe = textutils.unserialiseJSON(textutils.serialiseJSON(recipe))
+
     local chest = peripheral.wrap("bottom")
     for slot = 1, chest.size(), 1 do
-        ws.sendSignal("print", chest.getItemDetail(slot))
+        local item = chest.getItemDetail(slot)
+        ws.sendSignal("print", item)
+
+        for recipeItemIndex, recipeItemData in ipairs(recipe) do
+            for invItem, invTag in pairs(item) do
+                if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
+                    for index, value in ipairs(recipeItemData.slots) do
+                        turtle.pullItems(peripheral.getName(chest), slot, 1, value)
+                    end
+                end
+            end
+        end
     end
 end
 
