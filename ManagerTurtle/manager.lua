@@ -52,7 +52,7 @@ local function craft(recipe)
             ws.sendSignal("print", item)
 
             for recipeItemIndex, recipeItemData in ipairs(recipe) do
-                for invItem, invTag in pairs(item) do
+                for invTag, exists in pairs(item.tags) do
                     if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
                         ws.sendSignal("print", invTag)
                         for index, value in ipairs(recipeItemData.slots) do
