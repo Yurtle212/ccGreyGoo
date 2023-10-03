@@ -48,6 +48,7 @@ end
 
 local function craft(recipe)
     recipe = textutils.unserialiseJSON(textutils.serialiseJSON(recipe))
+    util.emptyInventory()
 
     local chest = peripheral.wrap("bottom")
     for slot = 1, chest.size(), 1 do

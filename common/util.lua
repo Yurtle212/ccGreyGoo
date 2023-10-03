@@ -76,5 +76,12 @@ local function selectEmptySlot()
     return false
 end
 
+local function emptyInventory()
+    for i = 1, NUM_SLOTS, 1 do
+        turtle.select(i)
+        turtle.dropDown()
+    end
+end
+
 return { refuel = refuel, findItemInInventory = findItemInInventory, fuelItems = fuelItems, getChunk = getChunk,
-    NUM_SLOTS = NUM_SLOTS, get_keys = get_keys, selectEmptySlot = selectEmptySlot }
+    NUM_SLOTS = NUM_SLOTS, get_keys = get_keys, selectEmptySlot = selectEmptySlot, emptyInventory = emptyInventory}
