@@ -231,7 +231,6 @@ local function main()
     local recipeFiles = fs.open("./craftingRecipes.json", "r")
     local recipes = textutils.unserialiseJSON(recipeFiles.readAll())
     recipeFiles.close()
-    ws.sendSignal("recipes", recipes)
 
     -- local success = superCraft(recipes["minecraft:diamond_pickaxe"], recipes);
     -- ws.sendSignal("Crafted", success)
