@@ -79,8 +79,9 @@ local function craft(recipe)
     end
 
     turtle.select(1)
-    turtle.craft()
-    ws.sendSignal("Crafted")
+    local success = turtle.craft()
+    ws.sendSignal("Crafted", success)
+    return success
 end
 
 local function main()
