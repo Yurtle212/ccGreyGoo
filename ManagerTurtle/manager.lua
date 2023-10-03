@@ -60,7 +60,17 @@ local function craft(recipe)
                     ws.sendSignal("print", invTag)
                     if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
                         for index, value in ipairs(recipeItemData.slots) do
-                            turtle.pullItems(peripheral.getName(chest), slot, 1, value)
+                            if (slot ~= 1) then
+                                local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
+                                if (result == 0 and chest.getItemDetail(1) ~= nil) then
+                                    util.selectEmptySlot()
+                                    turtle.suckDown()
+                                    chest.pushItems(peripheral.getName(chest), slot, 1, 1)
+                                    turtle.dropDown()
+                                    turtle.select(value)
+                                    turtle.suckDown()
+                                end
+                            end
                         end
                     end
                 end

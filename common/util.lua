@@ -67,5 +67,14 @@ local function get_keys(t)
     return keys
 end
 
+local function selectEmptySlot()
+    for i = 1, turtle.NUM_SLOTS, 1 do
+        if turtle.getItemCount(i) == 0 then
+            return true
+        end
+    end
+    return false
+end
+
 return { refuel = refuel, findItemInInventory = findItemInInventory, fuelItems = fuelItems, getChunk = getChunk,
     NUM_SLOTS = NUM_SLOTS, get_keys = get_keys }
