@@ -200,7 +200,7 @@ local function mineChunk(position, heading)
     subdivisions = transformedSubdivisions(subdivisions, position)
 
     local coalSlot, coalAmount = getItemInInventory("minecraft:coals")
-    coalAmount = coalAmount / actualAmount
+    coalAmount = math.max(coalAmount / actualAmount, 16)
 
     local chest = peripheral.wrap("bottom")
 
