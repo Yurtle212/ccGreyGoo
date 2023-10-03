@@ -48,13 +48,16 @@ local function craft(recipe)
     local chest = peripheral.wrap("bottom")
     for slot = 1, chest.size(), 1 do
         local item = chest.getItemDetail(slot)
-        ws.sendSignal("print", item)
+        if (item ~= nil) then
+            ws.sendSignal("print", item)
 
-        for recipeItemIndex, recipeItemData in ipairs(recipe) do
-            for invItem, invTag in pairs(item) do
-                if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
-                    for index, value in ipairs(recipeItemData.slots) do
-                        turtle.pullItems(peripheral.getName(chest), slot, 1, value)
+            for recipeItemIndex, recipeItemData in ipairs(recipe) do
+                for invItem, invTag in pairs(item) do
+                    if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
+                        ws.sendSignal("print", invTag)
+                        for index, value in ipairs(recipeItemData.slots) do
+                            turtle.pullItems(peripheral.getName(chest), slot, 1, value)
+                        end
                     end
                 end
             end
