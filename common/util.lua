@@ -79,10 +79,30 @@ local function selectEmptySlot()
     return false
 end
 
-local function emptyInventory()
+local function emptyInventory(excludeTags)
+    if (excludeTags == nil) then
+        excludeTags = {}
+    end
+
     for i = 1, NUM_SLOTS, 1 do
         turtle.select(i)
-        turtle.dropDown()
+        local skip = false
+
+        for index, excludeTag in ipairs(excludeTags) do
+            for key, value in pairs(turtle.getItemDetail(nil, true).tags) do
+                if (excludeTag == key) then
+                    skip = true
+                    break
+                end
+            end
+            if skip then
+                break
+            end
+        end
+
+        if (not skip) then
+            turtle.dropDown()
+        end
     end
 end
 

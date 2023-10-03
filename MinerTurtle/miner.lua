@@ -2,6 +2,13 @@ local ws = require "communication"
 
 InterruptCallbacks = {}
 
+-- Filters = {
+--     "minecraft:coals",
+--     "forge:gems/diamond",
+--     "forge:dusts/redstone",
+--     "minecraft:planks"
+-- }
+
 local function interrupt(signal)
     if (InterruptCallbacks[signal.type] ~= nil) then
         for index, callback in ipairs(InterruptCallbacks[signal.type]) do
