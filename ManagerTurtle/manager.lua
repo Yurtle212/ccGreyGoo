@@ -2,6 +2,10 @@ local movement = require "movement"
 local ws = require "communication"
 local util = require "util"
 
+local function interrupt(signal)
+    
+end
+
 local function subdivideChunk(numBots)
     local subdivisions = {}
 
@@ -98,4 +102,9 @@ local function main()
     end
 end
 
-parallel.waitForAny(main, ws.websocketHandler)
+parallel.waitForAny(
+    main, 
+    function ()
+        ws.websocketHandler(interrupt)
+    end
+)

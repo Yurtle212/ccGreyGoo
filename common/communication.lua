@@ -3,7 +3,7 @@
 Websocket = assert(http.websocket("wss://yurtle.net/cc/" .. settings.get("wsid")))
 WebsocketOpen = true
 
-local function websocketHandler()
+local function websocketHandler(interrupt)
     while true do
         local raw = Websocket.receive()
         if (raw == nil) then
@@ -25,6 +25,8 @@ local function websocketHandler()
                     os.time())
 
                 shell.run("reboot")
+            else
+                interrupt(signal)
             end
         end
     end
