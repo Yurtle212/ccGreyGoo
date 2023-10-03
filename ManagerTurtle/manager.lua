@@ -87,7 +87,7 @@ local function main()
     local subdivisions = subdivideChunk(4)
     subdivisions = transformedSubdivisions(subdivisions)
 
-    craft(recipes["computercraft:computer"])
+    craft(recipes["computercraft:computer"].recipe)
 
     while true do
         local timer_id = os.startTimer(1)
