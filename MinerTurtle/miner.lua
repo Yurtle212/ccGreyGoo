@@ -1,7 +1,7 @@
 local ws = require "communication"
 
-local function interrupt()
-
+local function interrupt(signal)
+    
 end
 
 local function excavate(subdivision)
@@ -9,20 +9,22 @@ local function excavate(subdivision)
 end
 
 local function main()
-    while true do
-        local timer_id = os.startTimer(1)
-        local event, id
-        repeat
-            event, id = os.pullEvent("timer")
-        until id == timer_id
-
-        
-    end
+    ws.sendSignal("Awaiting Instructions", {
+        id = os.getComputerID()
+    })
 end
 
-parallel.waitForAny(
-    main,
-    function()
-        ws.websocketHandler(interrupt)
-    end
-)
+local function init()
+    local channel = tostring(peripheral.wrap("back").getID())
+    settings.set("wsid", tostring(os.getComputerID()))
+
+    parallel.waitForAny
+    (
+        main,
+        function()
+            ws.websocketHandler(interrupt)
+        end
+    )
+end
+
+init()

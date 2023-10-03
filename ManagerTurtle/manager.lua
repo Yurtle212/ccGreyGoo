@@ -3,9 +3,15 @@ local ws = require "communication"
 local util = require "util"
 
 MaxCraftingDepth = 5
+InterruptCallbacks = {}
 
 local function interrupt(signal)
-
+    for index, callback in ipairs(InterruptCallbacks[signal.type]) do
+        if (callback ~= nil) then
+            callback(signal)
+            InterruptCallbacks[index] = nil
+        end
+    end
 end
 
 local function subdivideChunk(numBots)
@@ -49,6 +55,10 @@ local function transformedSubdivisions(subdivisions)
 end
 
 local function getItemInInventory(tag, amount)
+    if (amount == nil) then
+        amount = 1
+    end
+
     local chest = peripheral.wrap("bottom")
     local count = 0
 
@@ -131,11 +141,6 @@ local function superCraft(recipe, recipes, amount, depth)
         local ingredientAmount = math.ceil(amount / recipe.amount)
 
         local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount * #recipeItemData.slots)
-        ws.sendSignal("print", {
-            tmp = tmp,
-            count = count,
-            recipeItemData = recipeItemData
-        })
         if (tmp == -1) then
             return false
         end
@@ -147,6 +152,53 @@ local function superCraft(recipe, recipes, amount, depth)
     end
 
     return turtle.craft()
+end
+
+local function deployMiner(subdivisions, index, fuelAmount, position, heading)
+    turtle.place()
+    peripheral.wrap("forward").turnOn()
+
+    local deployCallback = function (signal)
+        local chest = peripheral.wrap("bottom")
+
+        local slot, amount = getItemInInventory("minecraft:coals", fuelAmount)
+        util.selectEmptySlot()
+        pullItemFromInventory(slot, chest, amount)
+        turtle.drop()
+
+        ws.sendSignal("instructions", {
+            position = position,
+            heading = heading,
+            subdivision = subdivisions[index],
+            index = index,
+            id = signal.data.id
+        })
+    end
+
+    InterruptCallbacks["Awaiting Instructions"][#InterruptCallbacks["Awaiting Instructions"]+1] = deployCallback
+end
+
+local function mineChunk(position, heading)
+    local slot, amount = getItemInInventory("computercraft:turtle")
+    amount = math.min(amount, settings.get("goo.maxMiners"))
+
+    local actualAmount = math.floor(math.sqrt(amount))
+    actualAmount = actualAmount * actualAmount
+
+    local subdivisions = subdivideChunk(actualAmount)
+    subdivisions = transformedSubdivisions(subdivisions)
+
+    local coalSlot, coalAmount = getItemInInventory("minecraft:coals")
+    coalAmount = coalAmount / actualAmount
+
+    for i = 1, actualAmount, 1 do
+        if (not util.selectEmptySlot()) then
+            turtle.select(1)
+            turtle.dropDown()
+        end
+        pullItemFromInventory(slot, 1, 1)
+        deployMiner(subdivisions, i, coalAmount, position, heading)
+    end
 end
 
 local function main()
@@ -168,17 +220,37 @@ local function main()
     recipeFiles.close()
     ws.sendSignal("recipes", recipes)
 
-    local subdivisions = subdivideChunk(4)
-    subdivisions = transformedSubdivisions(subdivisions)
-
-    local success = superCraft(recipes["minecraft:diamond_pickaxe"], recipes);
-    ws.sendSignal("Crafted", success)
+    -- local success = superCraft(recipes["minecraft:diamond_pickaxe"], recipes);
+    -- ws.sendSignal("Crafted", success)
     while true do
         local timer_id = os.startTimer(1)
         local event, id
         repeat
             event, id = os.pullEvent("timer")
         until id == timer_id
+
+        x, y, z = gps.locate()
+        position = {
+            x = x,
+            y = y,
+            z = z
+        }
+        -- local chest = peripheral.wrap("bottom")
+        -- local slot, amount = getItemInInventory("minecraft:compass")
+        -- if (slot > 0) then
+        --     if (util.selectEmptySlot()) then
+        --         local modem = turtle.getSelectedSlot()
+        --         turtle.equipLeft()
+        --         if (util.selectEmptySlot()) then
+        --             pullItemFromInventory(slot, chest, 1)
+        --             turtle.equipLeft()
+        --         end
+        --         turtle.select(modem)
+        --         turtle.equipLeft()
+        --     end
+        -- end
+
+        mineChunk(position, settings.get("heading"))
     end
 end
 

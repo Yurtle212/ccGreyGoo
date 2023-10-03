@@ -16,6 +16,8 @@ settings.define("wsid", {
     default = "0",
 })
 
+settings.set("ChannelBytes", 4)
+
 shell.run("delete json")
 shell.run("wget https://pastebin.com/raw/4nRg9CHU json")
 
@@ -37,6 +39,8 @@ if (settings.get("goo.type") == "manager") then
         default = 64,
         type = number
     })
+
+    settings.set("wsid", tostring(os.getComputerID()))
 
     shell.run("delete craftingRecipes.json")
     shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/ManagerTurtle/craftingRecipes.json?t=" .. os.time())
