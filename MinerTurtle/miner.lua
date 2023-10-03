@@ -18,8 +18,7 @@ local function init()
     local channel = tostring(peripheral.wrap("back").getID())
     settings.set("wsid", channel)
 
-    parallel.waitForAny
-    (
+    parallel.waitForAny(
         main,
         function()
             ws.websocketHandler(interrupt)
