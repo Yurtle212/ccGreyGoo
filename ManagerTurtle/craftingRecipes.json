@@ -42,7 +42,7 @@
             {
                 "tag": "minecraft:planks",
                 "slots": [5]
-            },
+            }
         ],
         "amount": 4
     },
@@ -55,7 +55,7 @@
             {
                 "tag": "balm:wooden_rods",
                 "slots": [6,10]
-            },
+            }
         ],
         "amount": 1
     }
