@@ -53,8 +53,8 @@ local function craft(recipe)
 
             for recipeItemIndex, recipeItemData in ipairs(recipe) do
                 for invTag, exists in pairs(item.tags) do
+                    ws.sendSignal("print", invTag)
                     if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
-                        ws.sendSignal("print", invTag)
                         for index, value in ipairs(recipeItemData.slots) do
                             turtle.pullItems(peripheral.getName(chest), slot, 1, value)
                         end
