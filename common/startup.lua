@@ -16,6 +16,11 @@ settings.define("wsid", {
     default = "0",
 })
 
+settings.define("goo.type", {
+    description = "goo type",
+    default = "miner",
+})
+
 settings.set("ChannelBytes", 4)
 
 shell.run("delete json")
@@ -49,7 +54,7 @@ if (settings.get("goo.type") == "manager") then
     shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/ManagerTurtle/manager.lua?t=" .. os.time())
 
     shell.run("manager")
-elseif settings.get("goo.type" == "miner") then
+elseif settings.get("goo.type") == "miner" then
     settings.define("minerID", {
         description = "Miner id",
         default = 0,
