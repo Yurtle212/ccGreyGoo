@@ -55,7 +55,7 @@ local function craft(recipe)
         if (item ~= nil) then
             for recipeItemIndex, recipeItemData in ipairs(recipe) do
                 for invTag, exists in pairs(item.tags) do
-                    if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
+                    if (invTag == recipeItemData.tag and item.count >= #recipeItemData.slots) then
                         if (slot ~= 1) then
                             local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
                             if (result == 0 and chest.getItemDetail(1) ~= nil) then
