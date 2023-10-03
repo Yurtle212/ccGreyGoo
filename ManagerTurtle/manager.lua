@@ -165,7 +165,8 @@ local function main()
     local subdivisions = subdivideChunk(4)
     subdivisions = transformedSubdivisions(subdivisions)
 
-    superCraft(recipes["minecraft:diamond_pickaxe"], recipes);
+    local success = superCraft(recipes["minecraft:diamond_pickaxe"], recipes);
+    ws.sendSignal("Crafted", success)
     while true do
         local timer_id = os.startTimer(1)
         local event, id
