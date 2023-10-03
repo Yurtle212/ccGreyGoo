@@ -89,13 +89,11 @@ local function superCraft(recipe, recipes, amount, depth)
     local maxLoops = 5
     local loop = 1
 
-    local ready = false
 
     for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
         local ingredientAmount = (#recipeItemData.slots) * math.ceil(amount / recipe.amount)
         local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount)
         if (tmp < 0) then
-            ready = false
             for recipeTag, recipeData in pairs(recipes) do
                 if (recipeTag == recipeItemData.tag) then
                     if (superCraft(recipeData, recipes, ingredientAmount - count, depth + 1)) then
@@ -106,10 +104,6 @@ local function superCraft(recipe, recipes, amount, depth)
                 end
             end
         end
-    end
-
-    if not ready then
-        return false
     end
 
     util.emptyInventory()
