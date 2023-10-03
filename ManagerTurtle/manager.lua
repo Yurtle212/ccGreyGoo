@@ -66,6 +66,12 @@ local function main()
     movement.moveUp(2)
     movement.moveDown(2)
 
+    local recipeFiles = fs.open("./craftingRecipes.json", "r")
+    local recipes = textutils.unserialiseJSON(recipeFiles.readAll())
+    recipeFiles.close()
+    ws.sendSignal("recipes", recipes)
+
+
     local x,y,z = gps.locate()
     local position = {
         x = x,
@@ -78,13 +84,9 @@ local function main()
     })
 
     local subdivisions = subdivideChunk(4)
-    ws.sendSignal("subdivisions", subdivisions)
-
     subdivisions = transformedSubdivisions(subdivisions)
-    ws.sendSignal("subdivisions", subdivisions)
 
-    craft("computercraft:computer")
-    craft("computercraft:turtle")
+    craft(recipes["computercraft:computer"])
     while true do
         os.startTimer(1)
         os.pullEvent("timer")
