@@ -189,7 +189,11 @@ local function deployMiner(subdivisions, index, fuelAmount, position, heading)
     peripheral.wrap("front").turnOn()
 end
 
-local function mineChunk(position, heading)
+local function mineChunk(position)
+    local heading = movement.GetHeading(false)
+    settings.set("heading", heading)
+    settings.save()
+
     local slot, amount = getItemInInventory("computercraft:turtle")
     amount = math.min(amount, settings.get("goo.maxMiners"))
 
@@ -200,7 +204,7 @@ local function mineChunk(position, heading)
     subdivisions = transformedSubdivisions(subdivisions, position)
 
     local coalSlot, coalAmount = getItemInInventory("minecraft:coals")
-    coalAmount = math.max(coalAmount / actualAmount, 16)
+    coalAmount = math.min(coalAmount / actualAmount, 16)
 
     local chest = peripheral.wrap("bottom")
 
@@ -241,28 +245,10 @@ local function main()
             event, id = os.pullEvent("timer")
         until id == timer_id
 
-        x, y, z = gps.locate()
-        position = {
-            x = x,
-            y = y,
-            z = z
-        }
-        -- local chest = peripheral.wrap("bottom")
-        -- local slot, amount = getItemInInventory("minecraft:compass")
-        -- if (slot > 0) then
-        --     if (util.selectEmptySlot()) then
-        --         local modem = turtle.getSelectedSlot()
-        --         turtle.equipLeft()
-        --         if (util.selectEmptySlot()) then
-        --             pullItemFromInventory(slot, chest, 1)
-        --             turtle.equipLeft()
-        --         end
-        --         turtle.select(modem)
-        --         turtle.equipLeft()
-        --     end
-        -- end
+        position = vector.new(gps.locate())
+        settings.set("position", position)
 
-        mineChunk(position, settings.get("heading"))
+        mineChunk(position)
     end
 end
 
