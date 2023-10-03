@@ -66,8 +66,7 @@ local function craft(recipe)
 end
 
 local function main()
-    movement.moveUp(2)
-    movement.moveDown(2)
+    ws.sendSignal("Initializing Grey Goo Manager")
 
     local x, y, z = gps.locate()
     local position = {
