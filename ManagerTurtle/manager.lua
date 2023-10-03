@@ -196,12 +196,14 @@ local function mineChunk(position, heading)
     local coalSlot, coalAmount = getItemInInventory("minecraft:coals")
     coalAmount = coalAmount / actualAmount
 
+    local chest = peripheral.wrap("bottom")
+
     for i = 1, actualAmount, 1 do
         if (not util.selectEmptySlot()) then
             turtle.select(1)
             turtle.dropDown()
         end
-        pullItemFromInventory(slot, 1, 1)
+        pullItemFromInventory(slot, chest, 1)
         deployMiner(subdivisions, i, coalAmount, position, heading)
     end
 end
