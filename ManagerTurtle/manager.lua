@@ -6,10 +6,12 @@ MaxCraftingDepth = 5
 InterruptCallbacks = {}
 
 local function interrupt(signal)
-    for index, callback in ipairs(InterruptCallbacks[signal.type]) do
-        if (callback ~= nil) then
-            callback(signal)
-            InterruptCallbacks[index] = nil
+    if (InterruptCallbacks[signal.type] ~= nil) then
+        for index, callback in ipairs(InterruptCallbacks[signal.type]) do
+            if (callback ~= nil) then
+                callback(signal)
+                InterruptCallbacks[index] = nil
+            end
         end
     end
 end
@@ -173,6 +175,10 @@ local function deployMiner(subdivisions, index, fuelAmount, position, heading)
             index = index,
             id = signal.data.id
         })
+    end
+
+    if (InterruptCallbacks["Awaiting Instructions"] == nil) then
+        InterruptCallbacks["Awaiting Instructions"] = {}
     end
 
     InterruptCallbacks["Awaiting Instructions"][#InterruptCallbacks["Awaiting Instructions"]+1] = deployCallback
