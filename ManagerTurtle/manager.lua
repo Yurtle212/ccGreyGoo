@@ -157,7 +157,7 @@ end
 
 local function deployMiner(subdivisions, index, fuelAmount, position, heading)
     turtle.place()
-    peripheral.wrap("forward").turnOn()
+    peripheral.wrap("front").turnOn()
 
     local deployCallback = function (signal)
         local chest = peripheral.wrap("bottom")
