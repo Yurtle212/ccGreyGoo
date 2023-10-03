@@ -71,7 +71,13 @@ local function main()
 end
 
 local function init()
-    local channel = tostring(peripheral.wrap("back").getID())
+    local parent = peripheral.wrap("back")
+    while parent == nil do
+        move.turnLeft()
+        parent = peripheral.wrap("back")
+    end
+
+    local channel = tostring(parent.getID())
     settings.set("wsid", channel)
     settings.save()
 
