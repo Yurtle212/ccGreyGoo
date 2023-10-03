@@ -66,13 +66,27 @@ local function getItemInInventory(tag, amount)
     for slot = 1, chest.size(), 1 do
         local item = chest.getItemDetail(slot)
         if (item ~= nil) then
+            local correctItem = false
+
+            if (item.name == tag) then
+                correctItem = true
+            end
+            
             for invTag, exists in pairs(item.tags) do
+                if (correctItem) then
+                    break
+                end
                 if (invTag == tag) then
                     if (item.count >= amount) then
-                        return slot, item.count
+                        correctItem = true
+                        break
                     end
                     count = count + item.count
                 end
+            end
+
+            if (correctItem) then
+                return slot, item.count
             end
         end
     end
