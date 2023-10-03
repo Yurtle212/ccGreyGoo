@@ -134,7 +134,7 @@ local function superCraft(recipe, recipes, amount, depth)
         ws.sendSignal("print", {
             tmp = tmp,
             count = count,
-            recipeItemData = recipeItemDataa
+            recipeItemData = recipeItemData
         })
         if (tmp == -1) then
             return false
