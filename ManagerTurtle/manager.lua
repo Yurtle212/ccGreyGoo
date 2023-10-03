@@ -68,6 +68,25 @@ local function getItemInInventory(tag, amount)
     return -1, count
 end
 
+local function pullItemFromInventory(slot, inv, amount)
+    local origSlot = turtle.getSelectedSlot()
+
+    if (slot ~= 1) then
+        local result = inv.pushItems(peripheral.getName(inv), 1, 1, inv.size())
+        if (result == 0 and inv.getItemDetail(1) ~= nil) then
+            util.selectEmptySlot()
+            turtle.suckDown()
+            inv.pushItems(peripheral.getName(inv), slot, 1, 1)
+            turtle.dropDown()
+        else
+            inv.pushItems(peripheral.getName(inv), slot, 1, 1)
+        end
+    end
+
+    turtle.select(origSlot)
+    turtle.suckDown(amount)
+end
+
 local function superCraft(recipe, recipes, amount, depth)
     if (amount == nil) then
         amount = 1
@@ -110,22 +129,11 @@ local function superCraft(recipe, recipes, amount, depth)
 
     for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
         local tmp, count = getItemInInventory(recipeItemData.tag, #recipeItemData.slots)
-        if (tmp ~= 1) then
-            local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
-            if (result == 0 and chest.getItemDetail(1) ~= nil) then
-                util.selectEmptySlot()
-                turtle.suckDown()
-                chest.pushItems(peripheral.getName(chest), tmp, 1, 1)
-                turtle.dropDown()
-            else
-                chest.pushItems(peripheral.getName(chest), tmp, 1, 1)
-            end
-        end
 
         local ingredientAmount = (#recipeItemData.slots) * math.floor(amount / recipe.amount)
         for index, value in ipairs(recipeItemData.slots) do
             turtle.select(value)
-            turtle.suckDown(ingredientAmount)
+            pullItemFromInventory(tmp, chest, ingredientAmount)
         end
     end
 
