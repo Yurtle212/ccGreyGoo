@@ -70,6 +70,7 @@ end
 local function selectEmptySlot()
     for i = 1, NUM_SLOTS, 1 do
         if turtle.getItemCount(i) == 0 then
+            turtle.select(i)
             return true
         end
     end
