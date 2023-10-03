@@ -36,9 +36,8 @@ local function subdivideChunk(numBots)
     return subdivisions
 end
 
-local function transformedSubdivisions(subdivisions)
-    local x, y, z = gps.locate()
-    local chunk = util.getChunk(x, z)
+local function transformedSubdivisions(subdivisions, position)
+    local chunk = util.getChunk(position.x, position.z)
     local chunkCoords = {
         x = chunk.x * 16,
         z = chunk.z * 16
@@ -192,7 +191,7 @@ local function mineChunk(position, heading)
     actualAmount = actualAmount * actualAmount
 
     local subdivisions = subdivideChunk(actualAmount)
-    subdivisions = transformedSubdivisions(subdivisions)
+    subdivisions = transformedSubdivisions(subdivisions, position)
 
     local coalSlot, coalAmount = getItemInInventory("minecraft:coals")
     coalAmount = coalAmount / actualAmount
