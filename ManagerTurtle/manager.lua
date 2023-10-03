@@ -59,22 +59,20 @@ local function craft(recipe)
                 for invTag, exists in pairs(item.tags) do
                     ws.sendSignal("print", invTag)
                     if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
-                        for index, value in ipairs(recipeItemData.slots) do
-                            if (slot ~= 1) then
-                                local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
-                                if (result == 0 and chest.getItemDetail(1) ~= nil) then
-                                    util.selectEmptySlot()
-                                    turtle.suckDown()
-                                    chest.pushItems(peripheral.getName(chest), slot, 1, 1)
-                                    turtle.dropDown()
-                                    turtle.select(value)
-                                    turtle.suckDown(1)
-                                else
-                                    chest.pushItems(peripheral.getName(chest), slot, 1, 1)
-                                    turtle.select(value)
-                                    turtle.suckDown(1)
-                                end
+                        if (slot ~= 1) then
+                            local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
+                            if (result == 0 and chest.getItemDetail(1) ~= nil) then
+                                util.selectEmptySlot()
+                                turtle.suckDown()
+                                chest.pushItems(peripheral.getName(chest), slot, 1, 1)
+                                turtle.dropDown()
+                            else
+                                chest.pushItems(peripheral.getName(chest), slot, 1, 1)
                             end
+                        end
+                        for index, value in ipairs(recipeItemData.slots) do
+                            turtle.select(value)
+                            turtle.suckDown(1)
                         end
                     end
                 end
