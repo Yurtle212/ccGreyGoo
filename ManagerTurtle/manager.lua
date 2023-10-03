@@ -164,6 +164,11 @@ local function deployMiner(subdivisions, index, fuelAmount, position, heading)
         pullItemFromInventory(slot, chest, fuelAmount)
         turtle.drop()
 
+        slot, amount = getItemInInventory("minecraft:diamond_pickaxe", 1)
+        util.selectEmptySlot()
+        pullItemFromInventory(slot, chest, 1)
+        turtle.drop()
+
         ws.sendSignal("instructions", {
             position = position,
             heading = heading,

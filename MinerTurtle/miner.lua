@@ -1,4 +1,6 @@
 local ws = require "communication"
+local util = require "util"
+local move = require "movement"
 
 InterruptCallbacks = {}
 
@@ -24,10 +26,16 @@ ReceivedData = nil
 local state = "idle"
 
 local function excavate(data)
+    turtle.select(util.findItemInInventory("minecraft:diamond_pickaxe"))
+    turtle.equipRight()
+
     ws.sendSignal("print", {
         message = "Excavating with data",
         data = data
     })
+
+    local startPos = vector.new(data.subdivision.x1, data.position.y + 15, data.subdivision.z1)
+    move.moveTo(startPos)
 end
 
 local function main()

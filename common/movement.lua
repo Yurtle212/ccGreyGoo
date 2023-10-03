@@ -182,4 +182,82 @@ local function turnRight(amount)
     return turn("right", amount)
 end
 
-return { moveForward = moveForward, moveUp = moveUp, moveDown = moveDown, GetHeading = GetHeading, Headings = Headings }
+local function turnToHeading(goalHeading)
+    local heading = GetHeading(true)
+    local retries = 5
+
+    while heading ~= goalHeading and retries >= 0 do
+        if goalHeading > heading then
+            if math.abs(heading - goalHeading) > 2 then
+                turnRight()
+            else
+                turnLeft()
+            end
+        else
+            if math.abs(heading - goalHeading) > 2 then
+                turnLeft()
+            else
+                turnRight()
+            end
+        end
+        retries = retries - 1
+    end
+end
+
+local function moveTo(goalPos)
+    local retries = 5
+
+    while settings.get("position").y ~= goalPos.y and retries >= 0 do
+        if (settings.get("position").y < goalPos.y) then
+            if not moveUp(goalPos.y - settings.get("position").y) then
+                retries = retries - 1
+            else
+                retries = 5
+            end
+        else
+            if not moveDown(settings.get("position").y - goalPos.y) then
+                retries = retries - 1
+            else
+                retries = 5
+            end
+        end
+    end
+
+    while settings.get("position").x ~= goalPos.x and retries >= 0 do
+        if (settings.get("position").x < goalPos.x) then
+            turnToHeading(Headings.positive_x)
+            if not moveForward(goalPos.x - settings.get("position").x) then
+                retries = retries - 1
+            else
+                retries = 5
+            end
+        else
+            turnToHeading(Headings.negative_x)
+            if not moveForward(settings.get("position").x - goalPos.x) then
+                retries = retries - 1
+            else
+                retries = 5
+            end
+        end
+    end
+
+    while settings.get("position").z ~= goalPos.z and retries >= 0 do
+        if (settings.get("position").z < goalPos.z) then
+            turnToHeading(Headings.positive_z)
+            if not moveForward(goalPos.z - settings.get("position").z) then
+                retries = retries - 1
+            else
+                retries = 5
+            end
+        else
+            turnToHeading(Headings.negative_z)
+            if not moveForward(settings.get("position").z - goalPos.z) then
+                retries = retries - 1
+            else
+                retries = 5
+            end
+        end
+    end
+end
+
+return { moveForward = moveForward, moveUp = moveUp, moveDown = moveDown, GetHeading = GetHeading, turnLeft = turnLeft, turnRight = turnRight, moveTo = moveTo, Headings = Headings }
