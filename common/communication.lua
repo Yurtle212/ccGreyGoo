@@ -28,7 +28,7 @@ local function websocketHandler()
 end
 
 local function sendSignal(signalType, data)
-    while ~WebsocketOpen do
+    while not WebsocketOpen do
         sleep(1)
     end
     Websocket.send(textutils.serialiseJSON({
