@@ -38,6 +38,9 @@ if (settings.get("goo.type") == "manager") then
         type = number
     })
 
+    shell.run("delete craftingRecipes.json")
+    shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/ManagerTurtle/craftingRecipes.json?t=" .. os.time())
+
     shell.run("delete manager.lua")
     shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/ManagerTurtle/manager.lua?t=" .. os.time())
 
