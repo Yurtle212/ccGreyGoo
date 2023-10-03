@@ -69,6 +69,10 @@ local function craft(recipe)
                                     turtle.dropDown()
                                     turtle.select(value)
                                     turtle.suckDown()
+                                else
+                                    chest.pushItems(peripheral.getName(chest), slot, 1, 1)
+                                    turtle.select(value)
+                                    turtle.suckDown()
                                 end
                             end
                         end
