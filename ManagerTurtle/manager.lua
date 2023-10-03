@@ -84,8 +84,6 @@ local function superCraft(recipe, recipes, amount, depth)
         return false
     end
 
-    util.emptyInventory()
-
     local chest = peripheral.wrap("bottom")
 
     local maxLoops = 5
@@ -93,22 +91,17 @@ local function superCraft(recipe, recipes, amount, depth)
 
     local ready = false
 
-    while loop < maxLoops and not ready do
-        ready = true
-        loop = loop + 1
-
-        for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
-            local ingredientAmount = (#recipeItemData.slots) * math.ceil(amount / recipe.amount)
-            local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount)
-            if (tmp < 0) then
-                ready = false
-                for recipeTag, recipeData in pairs(recipes) do
-                    if (recipeTag == recipeItemData.tag) then
-                        if (superCraft(recipeData, recipes, ingredientAmount - count, depth + 1)) then
-                            break
-                        else
-                            return false
-                        end
+    for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
+        local ingredientAmount = (#recipeItemData.slots) * math.ceil(amount / recipe.amount)
+        local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount)
+        if (tmp < 0) then
+            ready = false
+            for recipeTag, recipeData in pairs(recipes) do
+                if (recipeTag == recipeItemData.tag) then
+                    if (superCraft(recipeData, recipes, ingredientAmount - count, depth + 1)) then
+                        break
+                    else
+                        return false
                     end
                 end
             end
@@ -118,6 +111,8 @@ local function superCraft(recipe, recipes, amount, depth)
     if not ready then
         return false
     end
+
+    util.emptyInventory()
 
     for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
         local tmp, count = getItemInInventory(recipeItemData.tag, #recipeItemData.slots)
