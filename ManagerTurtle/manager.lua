@@ -157,9 +157,15 @@ end
 
 local function deployMiner(subdivisions, index, fuelAmount, position, heading)
     turtle.place()
+    local timer_id = os.startTimer(1)
+    local event, id
+    repeat
+        event, id = os.pullEvent("timer")
+    until id == timer_id
+
     peripheral.wrap("front").turnOn()
 
-    local deployCallback = function (signal)
+    local deployCallback = function(signal)
         local chest = peripheral.wrap("bottom")
 
         local slot, amount = getItemInInventory("minecraft:coals", fuelAmount)
@@ -180,7 +186,7 @@ local function deployMiner(subdivisions, index, fuelAmount, position, heading)
         InterruptCallbacks["Awaiting Instructions"] = {}
     end
 
-    InterruptCallbacks["Awaiting Instructions"][#InterruptCallbacks["Awaiting Instructions"]+1] = deployCallback
+    InterruptCallbacks["Awaiting Instructions"][#InterruptCallbacks["Awaiting Instructions"] + 1] = deployCallback
 end
 
 local function mineChunk(position, heading)
