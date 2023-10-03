@@ -53,11 +53,8 @@ local function craft(recipe)
     for slot = 1, chest.size(), 1 do
         local item = chest.getItemDetail(slot)
         if (item ~= nil) then
-            ws.sendSignal("print", item)
-
             for recipeItemIndex, recipeItemData in ipairs(recipe) do
                 for invTag, exists in pairs(item.tags) do
-                    ws.sendSignal("print", invTag)
                     if (invTag == recipeItemData.tag and item.count > #recipeItemData.slots) then
                         if (slot ~= 1) then
                             local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
