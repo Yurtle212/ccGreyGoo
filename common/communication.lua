@@ -1,7 +1,7 @@
 -- os.loadAPI("json")
 
 Websocket = assert(http.websocket("wss://yurtle.net/cc/" .. settings.get("wsid")))
-WebsocketOpen = false
+WebsocketOpen = true
 
 local function websocketHandler()
     while true do
