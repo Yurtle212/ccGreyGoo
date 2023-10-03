@@ -9,12 +9,12 @@ local function subdivideChunk(numBots)
 
     for x = 1, width, 1 do
         for z = 1, width, 1 do
-            subdivisions[((x-1) * width) + z] = {
-                x1 = math.floor(((x-1) / width) * 16),
-                x2 = math.floor((x / width) * 16)-1,
+            subdivisions[((x - 1) * width) + z] = {
+                x1 = math.floor(((x - 1) / width) * 16),
+                x2 = math.floor((x / width) * 16) - 1,
 
-                z1 = math.floor(((z-1) / width) * 16),
-                z2 = math.floor((z / width) * 16)-1
+                z1 = math.floor(((z - 1) / width) * 16),
+                z2 = math.floor((z / width) * 16) - 1
             }
         end
     end
@@ -69,11 +69,12 @@ local function main()
     ws.sendSignal("Loading Recipes", {})
 
     local recipeFiles = fs.open("./craftingRecipes.json", "r")
+    ws.sendSignal("recipes", recipeFiles.readAll())
     local recipes = textutils.unserialiseJSON(recipeFiles.readAll())
     recipeFiles.close()
     ws.sendSignal("recipes", recipes)
 
-    local x,y,z = gps.locate()
+    local x, y, z = gps.locate()
     local position = {
         x = x,
         y = y,
@@ -88,12 +89,13 @@ local function main()
     subdivisions = transformedSubdivisions(subdivisions)
 
     craft(recipes["computercraft:computer"])
-    
-    while true do
-        os.startTimer(1)
-        os.pullEvent("timer")
 
-        
+    while true do
+        local timer_id = os.startTimer(1)
+        local event, id
+        repeat
+            event, id = os.pullEvent("timer")
+        until id == timer_id
     end
 end
 

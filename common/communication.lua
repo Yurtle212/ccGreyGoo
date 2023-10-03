@@ -9,8 +9,11 @@ local function websocketHandler()
         if (raw == nil) then
             print("re-init websocket")
             WebsocketOpen = false
-            os.startTimer(2)
-            os.pullEvent("timer")
+            local timer_id = os.startTimer(2)
+            local event, id
+            repeat
+                event, id = os.pullEvent("timer")
+            until id == timer_id
 
             Websocket = assert(http.websocket("wss://yurtle.net/cc/" .. settings.get("wsid")))
             WebsocketOpen = true
@@ -29,7 +32,11 @@ end
 
 local function sendSignal(signalType, data)
     while not WebsocketOpen do
-        sleep(1)
+        local timer_id = os.startTimer(2)
+        local event, id
+        repeat
+            event, id = os.pullEvent("timer")
+        until id == timer_id
     end
     Websocket.send(textutils.serialiseJSON({
         type = signalType,
