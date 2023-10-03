@@ -61,7 +61,7 @@ elseif (settings.get("goo.type") == "miner") then
         type = number,
     })
 
-    shell.run("delete manager.lua")
+    shell.run("delete miner.lua")
     shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/MinerTurtle/miner.lua?t=" .. os.time())
 
     shell.run("miner")
