@@ -50,6 +50,8 @@ local function refuel(amount)
             fueledAmount = fueledAmount + fuelItems[detail.name] * detail.count
         end
     end
+
+    return turtle.getFuelLevel() > 0
 end
 
 local function getChunk(x, z)

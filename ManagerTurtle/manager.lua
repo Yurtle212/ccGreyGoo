@@ -10,7 +10,7 @@ local function interrupt(signal)
         for index, callback in ipairs(InterruptCallbacks[signal.type]) do
             if (callback ~= nil) then
                 callback(signal)
-                InterruptCallbacks[index] = nil
+                InterruptCallbacks[signal.type][index] = nil
             end
         end
     end

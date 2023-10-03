@@ -1,14 +1,12 @@
-Headings = {
-    north = 0,
-    east = 1,
-    south = 2,
-    west = 3,
-}
-
 settings.define("heading", {
     description = "Heading of the turtle",
-    default = Headings.north,
+    default = 3,
     type = number,
+})
+
+settings.define("position", {
+    description = "Heading of the turtle",
+    default = vector.new(0,0,0)
 })
 
 settings.define("wsid", {
@@ -46,6 +44,7 @@ if (settings.get("goo.type") == "manager") then
     })
 
     settings.set("wsid", tostring(os.getComputerID()))
+    settings.save()
 
     shell.run("delete craftingRecipes.json")
     shell.run("wget https://raw.githubusercontent.com/Yurtle212/ccGreyGoo/main/ManagerTurtle/craftingRecipes.json?t=" .. os.time())
