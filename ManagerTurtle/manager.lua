@@ -129,6 +129,9 @@ local function superCraft(recipe, recipes, amount, depth)
 
     for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
         local tmp, count = getItemInInventory(recipeItemData.tag, #recipeItemData.slots)
+        if (tmp == -1) then
+            return false
+        end
 
         local ingredientAmount = math.ceil(amount / recipe.amount)
         for index, value in ipairs(recipeItemData.slots) do
@@ -162,7 +165,7 @@ local function main()
     local subdivisions = subdivideChunk(4)
     subdivisions = transformedSubdivisions(subdivisions)
 
-    superCraft(recipes["computercraft:turtle"], recipes);
+    superCraft(recipes["minecraft:diamond_pickaxe"], recipes);
     while true do
         local timer_id = os.startTimer(1)
         local event, id
