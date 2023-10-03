@@ -128,12 +128,13 @@ local function superCraft(recipe, recipes, amount, depth)
     util.emptyInventory()
 
     for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
-        local tmp, count = getItemInInventory(recipeItemData.tag, #recipeItemData.slots)
+        local ingredientAmount = math.ceil(amount / recipe.amount)
+
+        local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount)
         if (tmp == -1) then
             return false
         end
 
-        local ingredientAmount = math.ceil(amount / recipe.amount)
         for index, value in ipairs(recipeItemData.slots) do
             turtle.select(value)
             pullItemFromInventory(tmp, chest, ingredientAmount)
