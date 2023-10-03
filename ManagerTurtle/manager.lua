@@ -130,7 +130,7 @@ local function superCraft(recipe, recipes, amount, depth)
     for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
         local ingredientAmount = math.ceil(amount / recipe.amount)
 
-        local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount)
+        local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount * #recipeItemData.slots)
         if (tmp == -1) then
             return false
         end
