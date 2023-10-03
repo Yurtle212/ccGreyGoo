@@ -1,0 +1,36 @@
+{
+    "computercraft:computer": {
+        "recipe": [
+            {
+                "tag": "balm:stones",
+                "slots": [1,2,3,5,7,9,11]
+            },
+            {
+                "tag": "forge:dusts/redstone",
+                "slots": [6]
+            },
+            {
+                "tag": "forge:glass_panes",
+                "slots": [10]
+            }
+        ],
+        "amount": 1
+    },
+    "computercraft:turtle": {
+        "recipe": [
+            {
+                "tag": "forge:ingots/iron",
+                "slots": [1,2,3,5,7,9,11]
+            },
+            {
+                "tag": "computercraft:computer",
+                "slots": [6]
+            },
+            {
+                "tag": "forge:chests/wooden",
+                "slots": [10]
+            }
+        ],
+        "amount": 1
+    }
+}

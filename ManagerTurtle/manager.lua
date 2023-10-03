@@ -42,6 +42,13 @@ local function transformedSubdivisions(subdivisions)
     return subdivisions
 end
 
+local function craft(recipe)
+    local chest = peripheral.wrap("bottom")
+    for slot = 1, chest.size(), 1 do
+        ws.sendSignal("print", chest.getItemDetail(slot))
+    end
+end
+
 local function main()
     movement.moveUp(2)
     movement.moveDown(2)
@@ -54,7 +61,6 @@ local function main()
     }
 
     ws.sendSignal("Grey Goo Manager Initialized", {
-        message = "manager initialized",
         position = position
     })
 
@@ -64,6 +70,8 @@ local function main()
     subdivisions = transformedSubdivisions(subdivisions)
     ws.sendSignal("subdivisions", subdivisions)
 
+    craft("computercraft:computer")
+    craft("computercraft:turtle")
     while true do
         os.startTimer(1)
         os.pullEvent("timer")
