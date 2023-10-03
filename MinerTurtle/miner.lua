@@ -31,6 +31,7 @@ local function main()
     if (InterruptCallbacks["instructions"] == nil) then
         InterruptCallbacks["instructions"] = {}
     end
+    InterruptCallbacks["instructions"][#InterruptCallbacks["instructions"]+1] = handleData
 
     ws.sendSignal("Awaiting Instructions", {
         id = os.getComputerID()
