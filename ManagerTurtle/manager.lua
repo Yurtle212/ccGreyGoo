@@ -227,7 +227,7 @@ local function mineChunk(position)
 
     local chest = peripheral.wrap("top")
 
-    local deployPosition = movement.getForwardDelta(heading)
+    local deployPosition = movement.getForwardDelta(heading) + position
 
     for i = 1, actualAmount, 1 do
         if (not util.selectEmptySlot()) then
@@ -235,7 +235,7 @@ local function mineChunk(position)
             turtle.dropUp()
         end
         pullItemFromInventory(slot, chest, 1)
-        deployMiner(subdivisions, i, coalAmount, position, heading)
+        deployMiner(subdivisions, i, coalAmount, deployPosition, heading)
     end
 end
 
