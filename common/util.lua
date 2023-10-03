@@ -68,7 +68,7 @@ local function get_keys(t)
 end
 
 local function selectEmptySlot()
-    for i = 1, turtle.NUM_SLOTS, 1 do
+    for i = 1, NUM_SLOTS, 1 do
         if turtle.getItemCount(i) == 0 then
             return true
         end
