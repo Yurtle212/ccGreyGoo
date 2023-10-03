@@ -32,5 +32,31 @@
             }
         ],
         "amount": 1
+    },
+    "balm:wooden_rods": {
+        "recipe": [
+            {
+                "tag": "minecraft:planks",
+                "slots": [1]
+            },
+            {
+                "tag": "minecraft:planks",
+                "slots": [5]
+            },
+        ],
+        "amount": 4
+    },
+    "minecraft:diamond_pickaxe": {
+        "recipe": [
+            {
+                "tag": "minecraft:diamond",
+                "slots": [1,2,3]
+            },
+            {
+                "tag": "balm:wooden_rods",
+                "slots": [6,10]
+            },
+        ],
+        "amount": 1
     }
 }

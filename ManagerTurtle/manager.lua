@@ -2,8 +2,10 @@ local movement = require "movement"
 local ws = require "communication"
 local util = require "util"
 
+MaxCraftingDepth = 5
+
 local function interrupt(signal)
-    
+
 end
 
 local function subdivideChunk(numBots)
@@ -46,31 +48,60 @@ local function transformedSubdivisions(subdivisions)
     return subdivisions
 end
 
-local function craft(recipe)
-    recipe = textutils.unserialiseJSON(textutils.serialiseJSON(recipe))
-    util.emptyInventory()
-
+local function getItemInInventory(tag, amount)
     local chest = peripheral.wrap("bottom")
     for slot = 1, chest.size(), 1 do
         local item = chest.getItemDetail(slot)
         if (item ~= nil) then
-            for recipeItemIndex, recipeItemData in ipairs(recipe) do
-                for invTag, exists in pairs(item.tags) do
-                    if (invTag == recipeItemData.tag and item.count >= #recipeItemData.slots and turtle.getItemCount(recipeItemData.slots[1]) == 0) then
-                        if (slot ~= 1) then
-                            local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
-                            if (result == 0 and chest.getItemDetail(1) ~= nil) then
-                                util.selectEmptySlot()
-                                turtle.suckDown()
-                                chest.pushItems(peripheral.getName(chest), slot, 1, 1)
-                                turtle.dropDown()
-                            else
-                                chest.pushItems(peripheral.getName(chest), slot, 1, 1)
-                            end
-                        end
-                        for index, value in ipairs(recipeItemData.slots) do
-                            turtle.select(value)
-                            turtle.suckDown(1)
+            for invTag, exists in pairs(item.tags) do
+                if (invTag == tag and item.count >= amount) then
+                    return slot
+                end
+            end
+        end
+    end
+    return -1
+end
+
+local function superCraft(recipe, recipes, amount, depth)
+    ws.sendSignal("Crafting", {
+        recipe = recipe,
+        amount = amount
+    })
+    
+    if (amount == nil) then
+        amount = 1
+    end
+
+    if (depth == nil) then
+        depth = 0
+    elseif depth > MaxCraftingDepth then
+        return false
+    end
+
+    util.emptyInventory()
+
+    local chest = peripheral.wrap("bottom")
+
+    local maxLoops = 5
+    local loop = 1
+
+    local ready = false
+
+    while loop < maxLoops and not ready do
+        ready = true
+        loop = loop + 1
+
+        for recipeItemIndex, recipeItemData in ipairs(recipe) do
+            local ingredientAmount = (#recipeItemData.slots) * math.floor(amount / recipeItemData.amount)
+            if (getItemInInventory(recipeItemData.tag, ingredientAmount) < 0) then
+                ready = false
+                for recipeTag, recipeData in pairs(recipes) do
+                    if (recipeTag == recipeItemData.tag) then
+                        if (superCraft(recipeData.recipe, recipes, ingredientAmount, depth + 1)) then
+                            break
+                        else
+                            return false
                         end
                     end
                 end
@@ -78,10 +109,32 @@ local function craft(recipe)
         end
     end
 
-    turtle.select(1)
-    local success = turtle.craft()
-    ws.sendSignal("Crafted", success)
-    return success
+    if not ready then
+        return false
+    end
+
+    for recipeItemIndex, recipeItemData in ipairs(recipe) do
+        local tmp = getItemInInventory(recipeItemData.tag, #recipeItemData.slots)
+        if (tmp ~= 1) then
+            local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
+            if (result == 0 and chest.getItemDetail(1) ~= nil) then
+                util.selectEmptySlot()
+                turtle.suckDown()
+                chest.pushItems(peripheral.getName(chest), tmp, 1, 1)
+                turtle.dropDown()
+            else
+                chest.pushItems(peripheral.getName(chest), tmp, 1, 1)
+            end
+        end
+
+        local ingredientAmount = (#recipeItemData.slots) * math.floor(amount / recipeItemData.amount)
+        for index, value in ipairs(recipeItemData.slots) do
+            turtle.select(value)
+            turtle.suckDown(ingredientAmount)
+        end
+    end
+
+    return turtle.craft()
 end
 
 local function main()
@@ -106,8 +159,7 @@ local function main()
     local subdivisions = subdivideChunk(4)
     subdivisions = transformedSubdivisions(subdivisions)
 
-    craft(recipes["computercraft:computer"].recipe)
-
+    superCraft(recipes["computercraft:turtle"].recipe, recipes);
     while true do
         local timer_id = os.startTimer(1)
         local event, id
@@ -118,8 +170,8 @@ local function main()
 end
 
 parallel.waitForAny(
-    main, 
-    function ()
+    main,
+    function()
         ws.websocketHandler(interrupt)
     end
 )
