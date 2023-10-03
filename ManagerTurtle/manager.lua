@@ -9,8 +9,8 @@ local function interrupt(signal)
     if (InterruptCallbacks[signal.type] ~= nil) then
         for index, callback in ipairs(InterruptCallbacks[signal.type]) do
             if (callback ~= nil) then
-                callback(signal)
                 InterruptCallbacks[signal.type][index] = nil
+                callback(signal)
             end
         end
     end
@@ -71,7 +71,7 @@ local function getItemInInventory(tag, amount)
             if (item.name == tag) then
                 correctItem = true
             end
-            
+
             for invTag, exists in pairs(item.tags) do
                 if (correctItem) then
                     break
@@ -257,17 +257,17 @@ local function main()
 
     -- local success = superCraft(recipes["minecraft:diamond_pickaxe"], recipes);
     -- ws.sendSignal("Crafted", success)
+    position = vector.new(gps.locate())
+    settings.set("position", position)
+
+    mineChunk(position)
+
     while true do
         local timer_id = os.startTimer(1)
         local event, id
         repeat
             event, id = os.pullEvent("timer")
         until id == timer_id
-
-        position = vector.new(gps.locate())
-        settings.set("position", position)
-
-        mineChunk(position)
     end
 end
 
