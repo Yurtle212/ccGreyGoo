@@ -138,7 +138,7 @@ function GetHeading(simple)
         local end_pos = vector.new(gps.locate(2, false))
         local heading = end_pos - start_pos
         moveBackward(1)
-        return ((heading.x + math.abs(heading.x) * 2) + (heading.z + math.abs(heading.z) * 3)) -- https://www.computercraft.info/forums2/index.php?/topic/1704-get-the-direction-the-turtle-face/
+        return ((heading.x + math.abs(heading.x) * 2) + (heading.z + math.abs(heading.z) * 3)) % 4 -- https://www.computercraft.info/forums2/index.php?/topic/1704-get-the-direction-the-turtle-face/
     end
 end
 
@@ -260,4 +260,4 @@ local function moveTo(goalPos)
     end
 end
 
-return { moveForward = moveForward, moveUp = moveUp, moveDown = moveDown, GetHeading = GetHeading, turnLeft = turnLeft, turnRight = turnRight, moveTo = moveTo, Headings = Headings }
+return { moveForward = moveForward, moveUp = moveUp, moveDown = moveDown, GetHeading = GetHeading, turnLeft = turnLeft, turnRight = turnRight, moveTo = moveTo, getForwardDelta = getForwardDelta, Headings = Headings }

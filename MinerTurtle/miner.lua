@@ -34,7 +34,7 @@ local function excavate(data)
         data = data
     })
 
-    local startPos = vector.new(data.subdivision.x1, data.position.y + 15, data.subdivision.z1)
+    local startPos = vector.new(data.subdivision.x1, data.position.y - 1, data.subdivision.z1)
     move.moveTo(startPos)
 end
 

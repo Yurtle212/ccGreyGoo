@@ -227,6 +227,8 @@ local function mineChunk(position)
 
     local chest = peripheral.wrap("bottom")
 
+    local deployPosition = movement.getForwardDelta(heading)
+
     for i = 1, actualAmount, 1 do
         if (not util.selectEmptySlot()) then
             turtle.select(1)
