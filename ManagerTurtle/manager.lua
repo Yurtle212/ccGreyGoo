@@ -97,14 +97,14 @@ local function superCraft(recipe, recipes, amount, depth)
         ready = true
         loop = loop + 1
 
-        for recipeItemIndex, recipeItemData in ipairs(recipe) do
-            local ingredientAmount = (#recipeItemData.slots) * math.ceil(amount / recipeItemData.amount)
+        for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
+            local ingredientAmount = (#recipeItemData.slots) * math.ceil(amount / recipe.amount)
             local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount)
             if (tmp < 0) then
                 ready = false
                 for recipeTag, recipeData in pairs(recipes) do
                     if (recipeTag == recipeItemData.tag) then
-                        if (superCraft(recipeData.recipe, recipes, ingredientAmount - count, depth + 1)) then
+                        if (superCraft(recipeData, recipes, ingredientAmount - count, depth + 1)) then
                             break
                         else
                             return false
@@ -119,7 +119,7 @@ local function superCraft(recipe, recipes, amount, depth)
         return false
     end
 
-    for recipeItemIndex, recipeItemData in ipairs(recipe) do
+    for recipeItemIndex, recipeItemData in ipairs(recipe.recipe) do
         local tmp, count = getItemInInventory(recipeItemData.tag, #recipeItemData.slots)
         if (tmp ~= 1) then
             local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
@@ -133,7 +133,7 @@ local function superCraft(recipe, recipes, amount, depth)
             end
         end
 
-        local ingredientAmount = (#recipeItemData.slots) * math.floor(amount / recipeItemData.amount)
+        local ingredientAmount = (#recipeItemData.slots) * math.floor(amount / recipe.amount)
         for index, value in ipairs(recipeItemData.slots) do
             turtle.select(value)
             turtle.suckDown(ingredientAmount)
@@ -165,7 +165,7 @@ local function main()
     local subdivisions = subdivideChunk(4)
     subdivisions = transformedSubdivisions(subdivisions)
 
-    superCraft(recipes["computercraft:turtle"].recipe, recipes);
+    superCraft(recipes["computercraft:turtle"], recipes);
     while true do
         local timer_id = os.startTimer(1)
         local event, id
