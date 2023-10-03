@@ -156,15 +156,6 @@ local function superCraft(recipe, recipes, amount, depth)
 end
 
 local function deployMiner(subdivisions, index, fuelAmount, position, heading)
-    turtle.place()
-    local timer_id = os.startTimer(1)
-    local event, id
-    repeat
-        event, id = os.pullEvent("timer")
-    until id == timer_id
-
-    peripheral.wrap("front").turnOn()
-
     local deployCallback = function(signal)
         local chest = peripheral.wrap("bottom")
 
@@ -187,6 +178,15 @@ local function deployMiner(subdivisions, index, fuelAmount, position, heading)
     end
 
     InterruptCallbacks["Awaiting Instructions"][#InterruptCallbacks["Awaiting Instructions"] + 1] = deployCallback
+
+    turtle.place()
+    local timer_id = os.startTimer(1)
+    local event, id
+    repeat
+        event, id = os.pullEvent("timer")
+    until id == timer_id
+
+    peripheral.wrap("front").turnOn()
 end
 
 local function mineChunk(position, heading)
