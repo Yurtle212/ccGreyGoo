@@ -77,6 +77,9 @@ local function craft(recipe)
             end
         end
     end
+
+    turtle.select(1)
+    turtle.craft()
 end
 
 local function main()
