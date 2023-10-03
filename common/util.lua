@@ -77,4 +77,4 @@ local function selectEmptySlot()
 end
 
 return { refuel = refuel, findItemInInventory = findItemInInventory, fuelItems = fuelItems, getChunk = getChunk,
-    NUM_SLOTS = NUM_SLOTS, get_keys = get_keys }
+    NUM_SLOTS = NUM_SLOTS, get_keys = get_keys, selectEmptySlot = selectEmptySlot }
