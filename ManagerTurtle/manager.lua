@@ -60,7 +60,7 @@ local function getItemInInventory(tag, amount)
         amount = 1
     end
 
-    local chest = peripheral.wrap("bottom")
+    local chest = peripheral.wrap("top")
     local count = 0
 
     for slot = 1, chest.size(), 1 do
@@ -128,7 +128,7 @@ local function superCraft(recipe, recipes, amount, depth)
         return false
     end
 
-    local chest = peripheral.wrap("bottom")
+    local chest = peripheral.wrap("top")
 
     local maxLoops = 5
     local loop = 1
@@ -171,7 +171,7 @@ end
 
 local function deployMiner(subdivisions, index, fuelAmount, position, heading)
     local deployCallback = function(signal)
-        local chest = peripheral.wrap("bottom")
+        local chest = peripheral.wrap("top")
 
         local slot, amount = getItemInInventory("minecraft:coals", fuelAmount)
         util.selectEmptySlot()
@@ -225,7 +225,7 @@ local function mineChunk(position)
     local coalSlot, coalAmount = getItemInInventory("minecraft:coals")
     coalAmount = math.min(coalAmount / actualAmount, 16)
 
-    local chest = peripheral.wrap("bottom")
+    local chest = peripheral.wrap("top")
 
     local deployPosition = movement.getForwardDelta(heading)
 
