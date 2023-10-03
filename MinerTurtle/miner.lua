@@ -25,7 +25,11 @@ end
 
 local function main()
     local function handleData(data)
-        ReceivedData = data
+        local pos = vector.new(data.data.position.x, data.data.position.y, data.data.position.z)
+        settings.set("position", pos)
+        settings.set("heading", data.data.heading)
+        settings.save()
+        ReceivedData = data.data
     end
 
     if (InterruptCallbacks["instructions"] == nil) then
