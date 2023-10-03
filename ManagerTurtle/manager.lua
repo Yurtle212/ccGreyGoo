@@ -161,7 +161,7 @@ local function deployMiner(subdivisions, index, fuelAmount, position, heading)
 
         local slot, amount = getItemInInventory("minecraft:coals", fuelAmount)
         util.selectEmptySlot()
-        pullItemFromInventory(slot, chest, amount)
+        pullItemFromInventory(slot, chest, fuelAmount)
         turtle.drop()
 
         ws.sendSignal("instructions", {
