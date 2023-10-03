@@ -66,11 +66,12 @@ local function main()
     movement.moveUp(2)
     movement.moveDown(2)
 
+    ws.sendSignal("Loading Recipes", {})
+
     local recipeFiles = fs.open("./craftingRecipes.json", "r")
     local recipes = textutils.unserialiseJSON(recipeFiles.readAll())
     recipeFiles.close()
     ws.sendSignal("recipes", recipes)
-
 
     local x,y,z = gps.locate()
     local position = {
@@ -87,6 +88,7 @@ local function main()
     subdivisions = transformedSubdivisions(subdivisions)
 
     craft(recipes["computercraft:computer"])
+    
     while true do
         os.startTimer(1)
         os.pullEvent("timer")

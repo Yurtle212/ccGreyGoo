@@ -91,11 +91,11 @@ app.ws('/:channel', function (ws, req) {
                 }
             } else {
                 if (msg.type == "ack") {
-                    msg.data.UUID = UUID;
+                    // msg.data.UUID = UUID;
                     msg.timestamp = Date.now();
                     sendMsgToAll(channel, ["ccConnections", "webConnections"], msg);
                 } else {
-                    msg.data.UUID = UUID;
+                    // msg.data.UUID = UUID;
                     msg.timestamp = Date.now();
                     sendMsgToAll(channel, ["ccConnections", "webConnections"], msg);
                 }
