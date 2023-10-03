@@ -100,16 +100,16 @@ local function pullItemFromInventory(slot, inv, amount)
         local result = inv.pushItems(peripheral.getName(inv), 1, 1, inv.size())
         if (result == 0 and inv.getItemDetail(1) ~= nil) then
             util.selectEmptySlot()
-            turtle.suckDown()
+            turtle.suckUp()
             inv.pushItems(peripheral.getName(inv), slot, 1, 1)
-            turtle.dropDown()
+            turtle.dropUp()
         else
             inv.pushItems(peripheral.getName(inv), slot, 1, 1)
         end
     end
 
     turtle.select(origSlot)
-    turtle.suckDown(amount)
+    turtle.suckUp(amount)
 end
 
 local function superCraft(recipe, recipes, amount, depth)
@@ -232,7 +232,7 @@ local function mineChunk(position)
     for i = 1, actualAmount, 1 do
         if (not util.selectEmptySlot()) then
             turtle.select(1)
-            turtle.dropDown()
+            turtle.dropUp()
         end
         pullItemFromInventory(slot, chest, 1)
         deployMiner(subdivisions, i, coalAmount, position, heading)
