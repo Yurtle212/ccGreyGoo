@@ -131,6 +131,11 @@ local function superCraft(recipe, recipes, amount, depth)
         local ingredientAmount = math.ceil(amount / recipe.amount)
 
         local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount * #recipeItemData.slots)
+        ws.sendSignal("print", {
+            tmp = tmp,
+            count = count,
+            recipeItemData = recipeItemDataa
+        })
         if (tmp == -1) then
             return false
         end
