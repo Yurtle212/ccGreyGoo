@@ -16,7 +16,7 @@ end
 
 local function init()
     local channel = tostring(peripheral.wrap("back").getID())
-    settings.set("wsid", tostring(os.getComputerID()))
+    settings.set("wsid", channel)
 
     parallel.waitForAny
     (
