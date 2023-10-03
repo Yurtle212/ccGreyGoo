@@ -64,14 +64,14 @@ local function getItemInInventory(tag, amount)
 end
 
 local function superCraft(recipe, recipes, amount, depth)
+    if (amount == nil) then
+        amount = 1
+    end
+    
     ws.sendSignal("Crafting", {
         recipe = recipe,
         amount = amount
     })
-    
-    if (amount == nil) then
-        amount = 1
-    end
 
     if (depth == nil) then
         depth = 0
