@@ -50,24 +50,29 @@ end
 
 local function getItemInInventory(tag, amount)
     local chest = peripheral.wrap("bottom")
+    local count = 0
+
     for slot = 1, chest.size(), 1 do
         local item = chest.getItemDetail(slot)
         if (item ~= nil) then
             for invTag, exists in pairs(item.tags) do
-                if (invTag == tag and item.count >= amount) then
-                    return slot
+                if (invTag == tag) then
+                    if (item.count >= amount) then
+                        return slot, item.count
+                    end
+                    count = count + item.count
                 end
             end
         end
     end
-    return -1
+    return -1, count
 end
 
 local function superCraft(recipe, recipes, amount, depth)
     if (amount == nil) then
         amount = 1
     end
-    
+
     ws.sendSignal("Crafting", {
         recipe = recipe,
         amount = amount
@@ -93,12 +98,13 @@ local function superCraft(recipe, recipes, amount, depth)
         loop = loop + 1
 
         for recipeItemIndex, recipeItemData in ipairs(recipe) do
-            local ingredientAmount = (#recipeItemData.slots) * math.floor(amount / recipeItemData.amount)
-            if (getItemInInventory(recipeItemData.tag, ingredientAmount) < 0) then
+            local ingredientAmount = (#recipeItemData.slots) * math.ceil(amount / recipeItemData.amount)
+            local tmp, count = getItemInInventory(recipeItemData.tag, ingredientAmount)
+            if (tmp < 0) then
                 ready = false
                 for recipeTag, recipeData in pairs(recipes) do
                     if (recipeTag == recipeItemData.tag) then
-                        if (superCraft(recipeData.recipe, recipes, ingredientAmount, depth + 1)) then
+                        if (superCraft(recipeData.recipe, recipes, ingredientAmount - count, depth + 1)) then
                             break
                         else
                             return false
@@ -114,7 +120,7 @@ local function superCraft(recipe, recipes, amount, depth)
     end
 
     for recipeItemIndex, recipeItemData in ipairs(recipe) do
-        local tmp = getItemInInventory(recipeItemData.tag, #recipeItemData.slots)
+        local tmp, count = getItemInInventory(recipeItemData.tag, #recipeItemData.slots)
         if (tmp ~= 1) then
             local result = chest.pushItems(peripheral.getName(chest), 1, 1, chest.size())
             if (result == 0 and chest.getItemDetail(1) ~= nil) then
