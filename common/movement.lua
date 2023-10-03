@@ -4,7 +4,7 @@ Headings = {
     negative_x = 1,
     negative_z = 2,
     positive_x = 3,
-    positive_z = 0,
+    positive_z = 4,
 }
 
 local function preMoveCheck(direction)
@@ -62,7 +62,10 @@ local function move(direction, blocks)
                     position = position + delta
                 end
             elseif (direction == "backward") then
-                local delta = getForwardDelta((GetHeading(true) + 2) % 4)
+                local backwards = (GetHeading(true) + 2)
+                if backwards > 4 then backwards = backwards - 4 end
+                local delta = getForwardDelta(backwards)
+                
                 if not turtle.back() then
                     blocks = blocks + 1
                     retries = retries - 1
@@ -138,7 +141,7 @@ function GetHeading(simple)
         local end_pos = vector.new(gps.locate(2, false))
         local heading = end_pos - start_pos
         moveBackward(1)
-        return ((heading.x + math.abs(heading.x) * 2) + (heading.z + math.abs(heading.z) * 3)) % 4 -- https://www.computercraft.info/forums2/index.php?/topic/1704-get-the-direction-the-turtle-face/
+        return ((heading.x + math.abs(heading.x) * 2) + (heading.z + math.abs(heading.z) * 3)) -- https://www.computercraft.info/forums2/index.php?/topic/1704-get-the-direction-the-turtle-face/
     end
 end
 
@@ -166,8 +169,9 @@ local function turn(direction, amount)
                 break
             end
         end
-        
-        heading = heading % 4
+
+        if heading > 4 then heading = heading - 4
+        elseif heading < 1 then heading = heading + 4 end
     end
 
     settings.set("heading", heading)
