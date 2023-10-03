@@ -65,7 +65,7 @@ local function move(direction, blocks)
                 local backwards = (GetHeading(true) + 2)
                 if backwards > 4 then backwards = backwards - 4 end
                 local delta = getForwardDelta(backwards)
-                
+
                 if not turtle.back() then
                     blocks = blocks + 1
                     retries = retries - 1
@@ -204,6 +204,7 @@ local function turnToHeading(goalHeading)
                 turnRight()
             end
         end
+        heading = GetHeading(true)
         retries = retries - 1
     end
 end
