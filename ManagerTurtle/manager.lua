@@ -66,14 +66,6 @@ local function main()
     movement.moveUp(2)
     movement.moveDown(2)
 
-    ws.sendSignal("Loading Recipes", {})
-
-    local recipeFiles = fs.open("./craftingRecipes.json", "r")
-    ws.sendSignal("recipes", recipeFiles.readAll())
-    local recipes = textutils.unserialiseJSON(recipeFiles.readAll())
-    recipeFiles.close()
-    ws.sendSignal("recipes", recipes)
-
     local x, y, z = gps.locate()
     local position = {
         x = x,
@@ -84,6 +76,11 @@ local function main()
     ws.sendSignal("Grey Goo Manager Initialized", {
         position = position
     })
+
+    local recipeFiles = fs.open("./craftingRecipes.json", "r")
+    local recipes = textutils.unserialiseJSON(recipeFiles.readAll())
+    recipeFiles.close()
+    ws.sendSignal("recipes", recipes)
 
     local subdivisions = subdivideChunk(4)
     subdivisions = transformedSubdivisions(subdivisions)
